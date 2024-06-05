@@ -1,9 +1,23 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import localFonts from "next/font/local";
 import "./globals.css";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { cn } from "@/lib/utils";
+import { ThemeProvider } from "@/components/providers/theme-provider";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
+const bebasNeue = localFonts({
+  src: "../fonts/BebasNeue.ttf",
+  variable: "--font-bebas",
+});
+const montserrat = localFonts({
+  src: "../fonts/Montserrat.ttf",
+  variable: "--font-montserrat",
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -17,8 +31,22 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        {children}
+      <body
+        className={cn(
+          "min-h-screen bg-background font-sans antialiased",
+          inter.variable,
+          bebasNeue.variable,
+          montserrat.variable,
+        )}
+      >
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
         <SpeedInsights />
       </body>
     </html>
