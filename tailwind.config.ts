@@ -21,7 +21,7 @@ const config = {
     extend: {
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
-        bebas: ["var(--font-bebas)"],
+        head: ["var(--font-head)"],
         montserrat: ["Var(--font-montserrat)"],
       },
       colors: {
