@@ -22,7 +22,7 @@ export default function AuthForm() {
   }
 
   return (
-    <section className="flex w-[28rem] max-w-[80%] flex-col gap-4">
+    <article className="flex w-[28rem] max-w-[90%] flex-col gap-4">
       {currentPage === "LOG IN" ? (
         <LoginForm isLoading={isLoading} setIsLoading={setIsLoading} />
       ) : (
@@ -79,6 +79,6 @@ export default function AuthForm() {
           </Button>{" "}
         </div>
       )}
-    </section>
+    </article>
   );
 }

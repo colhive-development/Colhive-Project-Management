@@ -42,9 +42,7 @@ export default function Page() {
             <ModeToggle />
           </div>
         </article>
-        <article>
-          <AuthForm />
-        </article>
+        <AuthForm />
       </section>
     </main>
   );
