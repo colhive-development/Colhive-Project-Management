@@ -31,9 +31,7 @@ export default function Page() {
       <section className="relative flex h-full items-center justify-center bg-background">
         <article className="absolute top-0 flex w-full items-center justify-between lg:right-4 lg:top-4">
           <div>
-            <p className="m-5 text-2xl font-extrabold lg:hidden lg:text-4xl">
-              Colhive
-            </p>
+            <p className="m-5 text-2xl font-extrabold lg:hidden">Colhive</p>
           </div>
           <div className="flex gap-5 pr-5 lg:pr-0">
             <Button variant="ghost" className="">

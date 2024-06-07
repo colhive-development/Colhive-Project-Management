@@ -6,6 +6,7 @@ import { useState } from "react";
 import LoginForm from "./LoginFrom";
 import RegisterForm from "./RegisterForm";
 import GoogleLogoIcon from "@/lib/icons/GoogleLogoIcon";
+import SocialSignIn from "@/functions/SocialSignin";
 
 export default function AuthForm() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -13,16 +14,16 @@ export default function AuthForm() {
     "LOG IN",
   );
 
-  async function onSubmit() {
+  async function onSubmit(provider: "github" | "google") {
     setIsLoading(true);
 
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
+    await SocialSignIn(provider);
+
+    setIsLoading(false);
   }
 
   return (
-    <article className="flex w-[28rem] max-w-[90%] flex-col gap-4">
+    <article className="mt-12 flex w-[28rem] max-w-[90%] flex-col gap-4 lg:mt-0">
       {currentPage === "LOG IN" ? (
         <LoginForm isLoading={isLoading} setIsLoading={setIsLoading} />
       ) : (
@@ -40,7 +41,7 @@ export default function AuthForm() {
       </div>
       <Button
         variant="outline"
-        onClick={onSubmit}
+        onClick={() => onSubmit("github")}
         disabled={isLoading}
         className="bg-black text-white hover:bg-zinc-800 hover:text-white"
       >
@@ -53,7 +54,7 @@ export default function AuthForm() {
       </Button>
       <Button
         variant="outline"
-        onClick={onSubmit}
+        onClick={() => onSubmit("google")}
         disabled={isLoading}
         className="bg-white text-black hover:bg-zinc-200 hover:text-black"
       >

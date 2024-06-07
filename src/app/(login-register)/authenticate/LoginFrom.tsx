@@ -1,25 +1,27 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { EyeClosedIcon, EyeOpenIcon } from "@radix-ui/react-icons";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import CredentialSignIn from '@/functions/CredentialSignin';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { EyeClosedIcon, EyeOpenIcon } from '@radix-ui/react-icons';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { z } from 'zod';
 
 const loginFormSchema = z.object({
   email: z.string().email({
-    message: "Enter a valid email.",
+    message: 'Enter a valid email.',
   }),
   password: z.string().min(8, {
     message: "Password can't be smaller than 8 characters.",
@@ -33,17 +35,29 @@ interface LoginFormProps {
 
 export default function LoginForm({ isLoading, setIsLoading }: LoginFormProps) {
   const [isPassword, setIsPassword] = useState<boolean>(false);
+  const router = useRouter();
 
   const loginForm = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
     },
   });
 
-  function onSubmit(values: z.infer<typeof loginFormSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof loginFormSchema>) {
+    setIsLoading(true);
+
+    const response = await CredentialSignIn(values.email, values.password);
+    const parsedResponse = JSON.parse(response || '');
+    if (parsedResponse.status === 200) {
+      toast.success(parsedResponse.message);
+    } else {
+      toast.error(parsedResponse.message);
+    }
+    router.push('/dashboard');
+    router.refresh();
+    setIsLoading(false);
   }
 
   return (
@@ -78,7 +92,7 @@ export default function LoginForm({ isLoading, setIsLoading }: LoginFormProps) {
                 <FormControl>
                   <Input
                     placeholder="********"
-                    type={isPassword ? "text" : "password"}
+                    type={isPassword ? 'text' : 'password'}
                     {...field}
                   />
                 </FormControl>
