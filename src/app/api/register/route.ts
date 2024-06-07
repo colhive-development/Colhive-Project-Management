@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prismaclient';
-import { v4 as uuid } from 'uuid';
+// import { v4 as uuid } from 'uuid';
 import bcrypt from 'bcryptjs';
-import { Resend } from 'resend';
-import EmailTemplate from '@/components/providers/email-template';
+// import { Resend } from 'resend';
+// import EmailTemplate from '@/components/providers/email-template';
 
 export async function POST(request: NextRequest) {
   try {
