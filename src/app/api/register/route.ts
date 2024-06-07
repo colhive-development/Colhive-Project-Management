@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prismaclient';
-// import { v4 as uuid } from 'uuid';
+import { v4 as uuid } from 'uuid';
 import bcrypt from 'bcryptjs';
-// import { Resend } from 'resend';
-// import EmailTemplate from '@/components/providers/email-template';
+import { Resend } from 'resend';
+import EmailTemplate from '@/components/providers/email-template';
 
 export async function POST(request: NextRequest) {
   try {
@@ -25,9 +25,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // const salt = bcrypt.genSaltSync(17);
-    const hash = bcrypt.hashSync(password, 17);
-    // const identifier = uuid();
+    const salt = bcrypt.genSaltSync(17);
+    const hash = bcrypt.hashSync(password, salt);
+    const identifier = uuid();
 
     const newUser = await prisma.user.create({
       data: {
@@ -38,25 +38,25 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // const verification = await prisma.verificationToken.create({
-    //   data: {
-    //     identifier: identifier,
-    //     userID: newUser.id,
-    //   },
-    // });
+    const verification = await prisma.verificationToken.create({
+      data: {
+        identifier: identifier,
+        userID: newUser.id,
+      },
+    });
 
-    // const resend = new Resend(process.env.RESEND_API_KEY);
+    const resend = new Resend(process.env.RESEND_API_KEY);
 
-    // const { data, error } = await resend.emails.send({
-    //   from: "Acme <onboarding@resend.dev>",
-    //   to: ["developer.colhive@gmail.com"],
-    //   subject: "Verify your Email - Colhive",
-    //   react: EmailTemplate({
-    //     type: "REGISTER",
-    //     name: newUser.name,
-    //     url: `${process.env.URL}/verify-email?identifier=${verification.identifier}`,
-    //   }),
-    // });
+    const { data, error } = await resend.emails.send({
+      from: 'Acme <onboarding@resend.dev>',
+      to: ['developer.colhive@gmail.com'],
+      subject: 'Verify your Email - Colhive',
+      react: EmailTemplate({
+        type: 'REGISTER',
+        name: newUser.name,
+        url: `${process.env.URL}/verify-email?identifier=${verification.identifier}`,
+      }),
+    });
 
     return NextResponse.json(
       {
