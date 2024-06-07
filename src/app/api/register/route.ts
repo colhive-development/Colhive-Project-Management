@@ -25,9 +25,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const salt = bcrypt.genSaltSync(17);
-    const hash = bcrypt.hashSync(password, salt);
-    const identifier = uuid();
+    // const salt = bcrypt.genSaltSync(17);
+    const hash = bcrypt.hashSync(password, 17);
+    // const identifier = uuid();
 
     const newUser = await prisma.user.create({
       data: {
