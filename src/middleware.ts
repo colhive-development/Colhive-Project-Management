@@ -26,7 +26,7 @@ export default auth(async (request) => {
     }
   }
 
-  if (request.nextUrl.pathname.startsWith('/authenticate') && user) {
+  if (request.nextUrl.pathname.startsWith('/authenticate') && user?.email) {
     return Response.redirect(new URL('/dashboard', request.url));
   }
 });

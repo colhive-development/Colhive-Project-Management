@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -8,15 +8,15 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { EyeClosedIcon, EyeOpenIcon } from "@radix-ui/react-icons";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import axios, { AxiosError, AxiosResponse } from "axios";
-import { toast } from "sonner";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { EyeClosedIcon, EyeOpenIcon } from '@radix-ui/react-icons';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import axios, { AxiosError, AxiosResponse } from 'axios';
+import { toast } from 'sonner';
 
 const registerFormSchema = z
   .object({
@@ -30,9 +30,9 @@ const registerFormSchema = z
   .superRefine(({ confirmPassword, password }, ctx) => {
     if (confirmPassword !== password) {
       ctx.addIssue({
-        code: "custom",
-        message: "The passwords did not match.",
-        path: ["confirmPassword"],
+        code: 'custom',
+        message: 'The passwords did not match.',
+        path: ['confirmPassword'],
       });
     }
   });
@@ -51,17 +51,17 @@ export default function RegisterForm({
   const registerForm = useForm<z.infer<typeof registerFormSchema>>({
     resolver: zodResolver(registerFormSchema),
     defaultValues: {
-      name: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
+      name: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
     },
   });
 
   async function onSubmit(values: z.infer<typeof registerFormSchema>) {
     setIsLoading(true);
     const data = await axios
-      .post("/api/register", {
+      .post(`${process.env.URL}/api/register`, {
         name: values.name,
         email: values.email,
         password: values.password,
@@ -71,7 +71,7 @@ export default function RegisterForm({
 
     if (data.status === 200) {
       toast.success(data.message, {
-        description: "Please check your Email for verification Link.",
+        description: 'Please check your Email for verification Link.',
       });
     } else {
       toast.error(data.message);
@@ -128,7 +128,7 @@ export default function RegisterForm({
                 <FormControl>
                   <Input
                     placeholder="********"
-                    type={isPassword ? "text" : "password"}
+                    type={isPassword ? 'text' : 'password'}
                     {...field}
                   />
                 </FormControl>
@@ -160,7 +160,7 @@ export default function RegisterForm({
                 <FormControl>
                   <Input
                     placeholder="********"
-                    type={isPassword ? "text" : "password"}
+                    type={isPassword ? 'text' : 'password'}
                     {...field}
                   />
                 </FormControl>
