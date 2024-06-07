@@ -36,12 +36,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           );
         }
 
-        const isPasswordCorrect = bcrypt.compareSync(
+        const isPasswordCorrect = await bcrypt.compare(
           credentials.password as string,
           user.password!,
         );
-
-        console.log(isPasswordCorrect, 'Password');
 
         if (!isPasswordCorrect) {
           throw new Error('{"message":"Incorrect Password","status":"403"}');

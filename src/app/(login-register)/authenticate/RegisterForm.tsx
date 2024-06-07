@@ -61,7 +61,7 @@ export default function RegisterForm({
   async function onSubmit(values: z.infer<typeof registerFormSchema>) {
     setIsLoading(true);
     const data = await axios
-      .post(`${process.env.URL}/api/register`, {
+      .post(`/api/register`, {
         name: values.name,
         email: values.email,
         password: values.password,
