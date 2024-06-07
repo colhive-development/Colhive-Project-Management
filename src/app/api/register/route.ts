@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
-import prisma from "@/lib/prismaclient";
-import { v4 as uuid } from "uuid";
-import bcrypt from "bcryptjs";
-import { Resend } from "resend";
-import EmailTemplate from "@/components/providers/email-template";
+import { NextRequest, NextResponse } from 'next/server';
+import prisma from '@/lib/prismaclient';
+import { v4 as uuid } from 'uuid';
+import bcrypt from 'bcryptjs';
+import { Resend } from 'resend';
+import EmailTemplate from '@/components/providers/email-template';
 
 export async function POST(request: NextRequest) {
   try {
@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
     if (existingUser) {
       return NextResponse.json(
         {
-          message: "User already exists",
+          message: 'User already exists',
           status: 409,
         },
         { status: 409 },
@@ -34,42 +34,42 @@ export async function POST(request: NextRequest) {
         name,
         email,
         password: hash,
-        emailVerified: false,
+        emailVerified: true,
       },
     });
 
-    const verification = await prisma.verificationToken.create({
-      data: {
-        identifier: identifier,
-        userID: newUser.id,
-      },
-    });
+    // const verification = await prisma.verificationToken.create({
+    //   data: {
+    //     identifier: identifier,
+    //     userID: newUser.id,
+    //   },
+    // });
 
-    const resend = new Resend(process.env.RESEND_API_KEY);
+    // const resend = new Resend(process.env.RESEND_API_KEY);
 
-    const { data, error } = await resend.emails.send({
-      from: "Acme <onboarding@resend.dev>",
-      to: ["developer.colhive@gmail.com"],
-      subject: "Verify your Email - Colhive",
-      react: EmailTemplate({
-        type: "REGISTER",
-        name: newUser.name,
-        url: `${process.env.URL}/verify-email?identifier=${verification.identifier}`,
-      }),
-    });
+    // const { data, error } = await resend.emails.send({
+    //   from: "Acme <onboarding@resend.dev>",
+    //   to: ["developer.colhive@gmail.com"],
+    //   subject: "Verify your Email - Colhive",
+    //   react: EmailTemplate({
+    //     type: "REGISTER",
+    //     name: newUser.name,
+    //     url: `${process.env.URL}/verify-email?identifier=${verification.identifier}`,
+    //   }),
+    // });
 
     return NextResponse.json(
       {
-        message: "Account created Successfully",
+        message: 'Account created Successfully',
         status: 200,
       },
       { status: 200 },
     );
   } catch (error: any) {
-    console.log("Registration Error", error);
+    console.log('Registration Error', error);
     return NextResponse.json(
       {
-        message: "Internal Server Error",
+        message: 'Internal Server Error',
         status: 500,
       },
       { status: 500 },
