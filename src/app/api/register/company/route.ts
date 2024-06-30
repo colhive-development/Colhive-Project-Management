@@ -7,18 +7,20 @@ import EmailTemplate from '@/components/providers/email-template';
 
 export async function POST(request: NextRequest) {
   try {
-    const { name, email, password } = await request.json();
+    const { name, email, designation, password, yourName } =
+      await request.json();
 
-    const existingUser = await prisma.user.findFirst({
+    const existingCompany = await prisma.user.findFirst({
       where: {
         email: email,
+        isCompany: true,
       },
     });
 
-    if (existingUser) {
+    if (existingCompany) {
       return NextResponse.json(
         {
-          message: 'User already exists',
+          message: 'Company already registered',
           status: 409,
         },
         { status: 409 },
@@ -28,13 +30,18 @@ export async function POST(request: NextRequest) {
     const salt = bcrypt.genSaltSync(17);
     const hash = bcrypt.hashSync(password, salt);
     const identifier = uuid();
+    const companyCode = uuid();
 
     const newUser = await prisma.user.create({
       data: {
-        name,
+        name: yourName,
         email,
+        role: designation,
+        organisation: name,
+        isCompany: true,
         password: hash,
-        emailVerified: true,
+        emailVerified: false,
+        companyCode: companyCode,
       },
     });
 

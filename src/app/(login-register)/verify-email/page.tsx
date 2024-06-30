@@ -1,6 +1,6 @@
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import axios, { AxiosError, AxiosResponse } from "axios";
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 
 interface PageProps {
   searchParams: {
@@ -13,8 +13,15 @@ export default async function Page({ searchParams }: PageProps) {
     .post(`${process.env.URL}/api/verify`, {
       identifier: searchParams.identifier,
     })
-    .then((response: AxiosResponse) => response.data)
-    .catch((error: AxiosError) => error.response?.data);
+    .then((response: AxiosResponse) => {
+      response.data;
+    })
+    .catch((error: AxiosError) => {
+      console.log(error);
+      return error.response?.data;
+    });
+
+  console.log(data);
 
   return (
     <main className="relative grid h-screen w-screen place-content-center">

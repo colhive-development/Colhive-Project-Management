@@ -12,6 +12,8 @@ model User {
   name          String?
   email         String?   @unique
   emailVerified Boolean?
+  isCompany     Boolean
+  companyCode   String
   password      String?
   image         String?
   setUP         Boolean?  @default(false)

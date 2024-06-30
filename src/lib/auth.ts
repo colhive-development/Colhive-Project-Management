@@ -1,6 +1,4 @@
 import NextAuth from 'next-auth';
-import Google from 'next-auth/providers/google';
-import GitHub from 'next-auth/providers/github';
 import Credentials from 'next-auth/providers/credentials';
 
 import { PrismaAdapter } from '@auth/prisma-adapter';
@@ -10,14 +8,6 @@ import bcrypt from 'bcryptjs';
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),
   providers: [
-    Google({
-      clientId: process.env.GOOGLE_AUTH_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_AUTH_CLIENT_SECRET,
-    }),
-    GitHub({
-      clientId: process.env.GITHUB_AUTH_CLIENT_ID,
-      clientSecret: process.env.GITHUB_AUTH_CLIENT_SECRET,
-    }),
     Credentials({
       credentials: {
         email: { type: 'email', label: 'Email' },
