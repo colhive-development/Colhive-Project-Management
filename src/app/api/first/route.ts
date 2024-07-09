@@ -5,7 +5,7 @@ import prisma from '@/lib/prismaclient';
 export async function POST(request: NextRequest) {
   try {
     const session = await auth();
-    const { organisation, role } = await request.json();
+    const { role } = await request.json();
 
     if (!session?.user?.email) {
       return NextResponse.json(
@@ -22,7 +22,6 @@ export async function POST(request: NextRequest) {
         email: session.user.email || '',
       },
       data: {
-        organisation,
         role,
         setUP: true,
       },

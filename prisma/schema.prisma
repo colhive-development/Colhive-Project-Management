@@ -25,6 +25,9 @@ model User {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  subprojectIds String[]     @db.ObjectId
+  subprojects   SubProject[] @relation(name: "SubMember", fields: [subprojectIds], references: [id])
 }
 
 model Account {
@@ -68,4 +71,29 @@ model VerificationToken {
   userID     String?
 
   @@unique([identifier, token])
+}
+
+model Project {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String
+
+  subProjects SubProject[] @relation(name: "subProject")
+}
+
+model SubProject {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String
+
+  admin     String   @db.ObjectId
+  memberIDs String[] @db.ObjectId
+  members   User[]   @relation(name: "SubMember", fields: [memberIDs], references: [id])
+
+  projectID String  @db.ObjectId
+  project   Project @relation(name: "subProject", fields: [projectID], references: [id], onDelete: Cascade)
+}
+
+model Task {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
 }

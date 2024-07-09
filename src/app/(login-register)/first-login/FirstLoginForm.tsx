@@ -27,9 +27,6 @@ import axios, { AxiosError, AxiosResponse } from 'axios';
 import { toast } from 'sonner';
 
 const formSchema = z.object({
-  organozation: z.string({
-    message: 'Field is needed',
-  }),
   role: z.string({
     message: 'Field is needed',
   }),
@@ -42,7 +39,6 @@ export default function FirstLoginForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      organozation: '',
       role: '',
     },
   });
@@ -52,7 +48,6 @@ export default function FirstLoginForm() {
 
     const response = await axios
       .post('/api/first', {
-        organisation: values.organozation,
         role: values.role,
       })
       .then((response: AxiosResponse) => response.data)
@@ -81,19 +76,6 @@ export default function FirstLoginForm() {
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
-            <FormField
-              name="organozation"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Your Organization</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Abc Inc." {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
             <FormField
               name="role"
               control={form.control}

@@ -42,6 +42,7 @@ export async function POST(request: NextRequest) {
         password: hash,
         emailVerified: false,
         companyCode: companyCode,
+        setUP: true,
       },
     });
 
