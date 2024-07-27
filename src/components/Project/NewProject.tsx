@@ -27,7 +27,7 @@ import {
 import { Input } from '../ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { ScrollArea } from '../ui/scroll-area';
-import { useState } from 'react';
+import { FC, useState } from 'react';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { toast } from 'sonner';
 
@@ -47,13 +47,12 @@ const newProjectFormSchema = z.object({
   }),
 });
 
-function NewProject({
-  otherUsers,
-  user,
-}: {
+interface NewProjectProps {
   otherUsers: User[] | undefined;
   user: User | null | undefined;
-}) {
+}
+
+const NewProject: FC<NewProjectProps> = ({ otherUsers, user }) => {
   const [isCreating, setIsCreating] = useState<boolean>(false);
 
   const form = useForm<z.infer<typeof newProjectFormSchema>>({
@@ -255,6 +254,6 @@ function NewProject({
       </DialogContent>
     </Dialog>
   );
-}
+};
 
 export default NewProject;
