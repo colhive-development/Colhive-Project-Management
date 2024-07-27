@@ -15,9 +15,10 @@ import React from 'react';
 
 export default async function Page() {
   const info = await getAllProjects();
+
   return (
     <main>
-      <section>
+      <section className="">
         <div>Projects</div>
         <NewProject otherUsers={info.otherUser} user={info.user} />
       </section>

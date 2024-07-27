@@ -48,7 +48,7 @@ const newProjectFormSchema = z.object({
 });
 
 interface NewProjectProps {
-  otherUsers: User[] | undefined;
+  otherUsers: User[] | undefined | null;
   user: User | null | undefined;
 }
 
