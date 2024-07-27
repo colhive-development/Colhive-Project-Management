@@ -18,8 +18,8 @@ export default async function Page() {
 
   return (
     <main>
-      <section className="">
-        <div>Projects</div>
+      <section className="m-4 flex justify-between">
+        <div className="text-4xl font-extrabold">Projects</div>
         <NewProject otherUsers={info.otherUser} user={info.user} />
       </section>
       <section className="m-4 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
