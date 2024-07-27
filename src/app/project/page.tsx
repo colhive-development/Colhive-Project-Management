@@ -23,7 +23,7 @@ export default async function Page() {
       </section>
       <section className="m-4 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         {info.projects.map((project) => (
-          <Card>
+          <Card key={project.id}>
             <CardHeader>
               <CardTitle className="text-xl">{project.name}</CardTitle>
               <CardDescription className="text-sm">
