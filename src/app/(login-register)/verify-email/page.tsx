@@ -10,18 +10,16 @@ interface PageProps {
 
 export default async function Page({ searchParams }: PageProps) {
   let data = await axios
-    .post(`${process.env.URL}/api/verify`, {
+    .post(`/api/verify`, {
       identifier: searchParams.identifier,
     })
     .then((response: AxiosResponse) => {
-      response.data;
+      return response.data;
     })
     .catch((error: AxiosError) => {
       console.log(error);
       return error.response?.data;
     });
-
-  console.log(data);
 
   return (
     <main className="relative grid h-screen w-screen place-content-center">

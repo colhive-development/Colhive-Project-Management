@@ -1,5 +1,10 @@
-import React from "react";
+import TopDashboardBar from './components/TopDashboardBar';
 
-export default function Page() {
-  return <main>DashBoard</main>;
+export default async function Page() {
+  return (
+    <main className="min-h-screen">
+      <p>DashBoard</p>
+      <TopDashboardBar />
+    </main>
+  );
 }

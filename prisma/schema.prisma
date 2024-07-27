@@ -8,24 +8,31 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
   name          String?
-  email         String?   @unique
+  email         String?  @unique
   emailVerified Boolean?
   isCompany     Boolean
   companyCode   String
   password      String?
   image         String?
-  setUP         Boolean?  @default(false)
-  accounts      Account[] @relation(name: "account")
-  sessions      Session[] @relation(name: "session")
+  setUP         Boolean? @default(false)
 
   organisation String?
   role         String?
 
+  accounts       Account[]        @relation(name: "account")
+  sessions       Session[]        @relation(name: "session")
+  projectAdminOf Project[]        @relation(name: "Project Admin")
+  taskAssigned   TaskIndividual[] @relation(name: "TaskIndividual User")
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  projectIDs String[]  @db.ObjectId
+  projects   Project[] @relation(name: "ProjectMember", fields: [projectIDs], references: [id])
+
+  subAdmin      SubProject[] @relation(name: "SubAdmin")
   subprojectIds String[]     @db.ObjectId
   subprojects   SubProject[] @relation(name: "SubMember", fields: [subprojectIds], references: [id])
 }
@@ -74,26 +81,66 @@ model VerificationToken {
 }
 
 model Project {
-  id          String @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  description String
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  description   String
+  githubLink    String?
+  rolesAssigned String[] @default([])
 
-  subProjects SubProject[] @relation(name: "subProject")
+  organizationHeadID String @db.ObjectId
+  organizationHead   User   @relation(name: "Project Admin", fields: [organizationHeadID], references: [id], onDelete: Cascade)
+
+  memberIDs String[] @db.ObjectId
+  members   User[]   @relation(name: "ProjectMember", fields: [memberIDs], references: [id])
+
+  started DateTime @default(now())
+
+  subProjects        SubProject[]     @relation(name: "subProject")
+  taskAssignedToTeam TaskSubProject[] @relation(name: "TaskSubProject Project")
 }
 
 model SubProject {
-  id          String @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  description String
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  description   String
+  rolesAssigned String[] @default([])
 
-  admin     String   @db.ObjectId
+  adminID   String   @db.ObjectId
+  admin     User     @relation(name: "SubAdmin", fields: [adminID], references: [id], onDelete: Cascade)
   memberIDs String[] @db.ObjectId
   members   User[]   @relation(name: "SubMember", fields: [memberIDs], references: [id])
 
   projectID String  @db.ObjectId
   project   Project @relation(name: "subProject", fields: [projectID], references: [id], onDelete: Cascade)
+
+  individualTask   TaskIndividual[] @relation(name: "TaskIndividual SubProject")
+  teamAssignedTask TaskSubProject[] @relation(name: "TaskSubProject SubProject")
 }
 
-model Task {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+model TaskIndividual {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  task        String
+  description String
+  status      String
+  priority    String
+  category    String
+
+  userID       String     @db.ObjectId
+  subProjectID String     @db.ObjectId
+  user         User       @relation(name: "TaskIndividual User", fields: [userID], references: [id], onDelete: Cascade)
+  subProject   SubProject @relation(name: "TaskIndividual SubProject", fields: [subProjectID], references: [id], onDelete: Cascade)
+}
+
+model TaskSubProject {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  task        String
+  description String
+  status      String
+  priority    String
+  category    String
+
+  subProjectID String     @db.ObjectId
+  projectID    String     @db.ObjectId
+  subProject   SubProject @relation(name: "TaskSubProject SubProject", fields: [subProjectID], references: [id], onDelete: Cascade)
+  project      Project    @relation(name: "TaskSubProject Project", fields: [projectID], references: [id], onDelete: Cascade)
 }
